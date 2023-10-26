@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+// Default xcode starter project item, delete later
 struct ContentView: View {
     var body: some View {
         VStack {

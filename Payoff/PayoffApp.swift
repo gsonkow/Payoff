@@ -11,7 +11,7 @@ import SwiftUI
 struct PayoffApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            EditableTextList()
         }
     }
 }
