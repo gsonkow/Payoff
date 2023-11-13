@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BAD3AAF32B02D4740087E1B0 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD3AAF22B02D4740087E1B0 /* SidebarView.swift */; };
 		C07E7B432AEB30DD001B2244 /* EditableTextList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E7B422AEB30DD001B2244 /* EditableTextList.swift */; };
 		C0E8C3A52AEB2FE700809B79 /* PayoffApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E8C3A42AEB2FE700809B79 /* PayoffApp.swift */; };
 		C0E8C3A72AEB2FE700809B79 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E8C3A62AEB2FE700809B79 /* ContentView.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BAD3AAF22B02D4740087E1B0 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		C07E7B422AEB30DD001B2244 /* EditableTextList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableTextList.swift; sourceTree = "<group>"; };
 		C0E8C3A12AEB2FE600809B79 /* Payoff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Payoff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0E8C3A42AEB2FE700809B79 /* PayoffApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayoffApp.swift; sourceTree = "<group>"; };
@@ -55,6 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E8C3A42AEB2FE700809B79 /* PayoffApp.swift */,
+				BAD3AAF22B02D4740087E1B0 /* SidebarView.swift */,
 				C07E7B422AEB30DD001B2244 /* EditableTextList.swift */,
 				C0E8C3A62AEB2FE700809B79 /* ContentView.swift */,
 				C0E8C3A82AEB2FE900809B79 /* Assets.xcassets */,
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C0E8C3A72AEB2FE700809B79 /* ContentView.swift in Sources */,
+				BAD3AAF32B02D4740087E1B0 /* SidebarView.swift in Sources */,
 				C0E8C3A52AEB2FE700809B79 /* PayoffApp.swift in Sources */,
 				C07E7B432AEB30DD001B2244 /* EditableTextList.swift in Sources */,
 			);
