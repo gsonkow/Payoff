@@ -47,22 +47,27 @@ struct EditableTextList: View {
   @State public var storyBeats: [StoryBeat] = [StoryBeat(text: "", isScene: true, tags: [])]
   @State public var tags: [String] = ["Love Plot", "Action"]
   @State private var selectedTag: String?
+  @State private var focusedBeatIndex: Int?
   
   
   var body: some View {
     List {
-      ForEach(storyBeats) { beat in
-        EditableTextRow(beat: $storyBeats[getIndex(for: beat)])
+        ForEach(storyBeats.indices, id: \.self) { beat in
+            EditableTextRow(beat: $storyBeats[beat])
+          .id(beat)
+          .onTapGesture {
+              focusedBeatIndex = beat
+          }
           .contextMenu {
             Button(action: {
-              deleteBeat(beat)
+                storyBeats.remove(at: beat)
             }) {
               Label("Delete", systemImage: "trash")
             }
             Menu("Add Tag") {
               ForEach(tags, id: \.self) { tag in
                 Button(tag) {
-                  assignTag(tag, to: beat)
+                  assignTag(tag, to: storyBeats[beat])
                 }
               }
             }
@@ -93,9 +98,14 @@ struct EditableTextList: View {
   }
   
   
-  func addNewBeat() {
-    storyBeats.append(StoryBeat(text: "", isScene: true, tags: []))
-  }
+    func addNewBeat() {
+        if let index = focusedBeatIndex {
+            storyBeats.insert(StoryBeat(text: "", isScene: true, tags: []), at: index + 1)
+            focusedBeatIndex = index + 1
+        } else {
+            storyBeats.append(StoryBeat(text: "", isScene: true, tags: []))
+        }
+    }
   
   func getIndex(for beat: StoryBeat) -> Int {
     if let index = storyBeats.firstIndex(where: { $0.id == beat.id }) {
@@ -104,11 +114,6 @@ struct EditableTextList: View {
     return 0
   }
   
-  func deleteBeat(_ beat: StoryBeat) {
-    if let index = storyBeats.firstIndex(where: { $0.id == beat.id }) {
-      storyBeats.remove(at: index)
-    }
-  }
 }
 
 
