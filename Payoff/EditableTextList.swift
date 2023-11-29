@@ -4,6 +4,12 @@
 //
 //  Created by Gabriel Sonkowsky on 10/24/23.
 //
+//
+//  EditableTextList.swift
+//  PayoffCenterComponent
+//
+//  Created by Gabriel Sonkowsky on 10/24/23.
+//
 
 import Foundation
 import SwiftUI
@@ -16,30 +22,61 @@ struct StoryBeat: Identifiable {
 }
 
 struct TagsSidebar: View {
-    @Binding var tags: [String]
-    @State private var newTag: String = ""
-    @Binding var selectedTag: String?
-
-    var body: some View {
-        VStack {
-            TextField("New Tag", text: $newTag, onCommit: {
-                if !newTag.isEmpty {
-                    tags.append(newTag)
-                    newTag = ""
-                }
-            })
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-
-            List(tags, id: \.self) { tag in
-                Text(tag)
-                    .onTapGesture {
-                        selectedTag = tag
-                    }
-            }
+  @Binding var tags: [String]
+  @State private var newTag: String = ""
+  @Binding var selectedTag: String?
+  
+  var body: some View {
+    VStack {
+      // New Tag Input Field with Plus Button
+      HStack {
+        TextField("New Tag", text: $newTag)
+          .textFieldStyle(RoundedBorderTextFieldStyle())
+        
+        Button(action: {
+          if !newTag.isEmpty && !tags.contains(newTag) {
+            tags.append(newTag)
+            newTag = ""
+          }
+        }) {
+          Image(systemName: "plus.circle.fill")
+            .foregroundColor(.blue)
         }
+        .buttonStyle(PlainButtonStyle())
+        .disabled(newTag.isEmpty)
+      }
+      .padding()
+      
+      // List of Tags with Bullet Indicators
+      List {
+        HStack {
+          Circle()
+            .fill(selectedTag == nil ? Color.blue : Color.clear)
+            .frame(width: 10, height: 10)
+          Text("All Tags")
+        }
+        .onTapGesture {
+          selectedTag = nil
+        }
+        
+        ForEach(tags, id: \.self) { tag in
+          HStack {
+            Circle()
+              .fill(selectedTag == tag ? Color.blue : Color.clear)
+              .frame(width: 10, height: 10)
+            Text(tag)
+          }
+          .onTapGesture {
+            selectedTag = tag
+          }
+        }
+      }
     }
+  }
 }
+
+
+
 
 
 
@@ -50,39 +87,54 @@ struct EditableTextList: View {
   
   
   var body: some View {
-    List {
-      ForEach(storyBeats) { beat in
-        EditableTextRow(beat: $storyBeats[getIndex(for: beat)])
-          .contextMenu {
-            Button(action: {
-              deleteBeat(beat)
-            }) {
-              Label("Delete", systemImage: "trash")
-            }
-            Menu("Add Tag") {
-              ForEach(tags, id: \.self) { tag in
-                Button(tag) {
-                  assignTag(tag, to: beat)
+    HStack{
+      TagsSidebar(tags: $tags, selectedTag: $selectedTag)
+        .frame(width: 200)
+      List {
+        ForEach(filteredStoryBeats) { beat in
+          EditableTextRow(beat: $storyBeats[getIndex(for: beat)])
+            .contextMenu {
+              Button(action: {
+                deleteBeat(beat)
+              }) {
+                Label("Delete", systemImage: "trash")
+              }
+              Menu("Add Tag") {
+                ForEach(tags, id: \.self) { tag in
+                  Button(tag) {
+                    assignTag(tag, to: beat)
+                  }
                 }
               }
             }
-          }
+        }
+        .onMove(perform: moveBeat)
       }
-      .onMove(perform: moveBeat)
-    }
-    .listStyle(PlainListStyle())
-    .frame(minWidth: 200, idealWidth: 300, maxWidth: .infinity, minHeight: 200, idealHeight: 400, maxHeight: .infinity)
-    .toolbar {
-      Button(action: {
-        addNewBeat()
-      }) {
-        Label("Add Beat", systemImage: "plus")
-      }.keyboardShortcut(.defaultAction)
+      
+      .listStyle(PlainListStyle())
+      .frame(minWidth: 200, idealWidth: 300, maxWidth: .infinity, minHeight: 200, idealHeight: 400, maxHeight: .infinity)
+      .toolbar {
+        Button(action: {
+          addNewBeat()
+        }) {
+          Label("Add Beat", systemImage: "plus")
+        }.keyboardShortcut(.defaultAction)
+      }
     }
   }
   
+  var filteredStoryBeats: [StoryBeat] {
+    if let selectedTag = selectedTag {
+      return storyBeats.filter { $0.tags.contains(selectedTag) }
+    } else {
+      return storyBeats
+    }
+  }
+  
+  //  METHODS
+  
   func assignTag(_ tag: String, to beat: StoryBeat) {
-    if var index = storyBeats.firstIndex(where: { $0.id == beat.id }) {
+    if let index = storyBeats.firstIndex(where: { $0.id == beat.id }) {
       storyBeats[index].tags.insert(tag)
     }
   }
