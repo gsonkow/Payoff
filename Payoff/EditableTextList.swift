@@ -4,12 +4,6 @@
 //
 //  Created by Gabriel Sonkowsky on 10/24/23.
 //
-//
-//  EditableTextList.swift
-//  PayoffCenterComponent
-//
-//  Created by Gabriel Sonkowsky on 10/24/23.
-//
 
 import Foundation
 import SwiftUI
@@ -76,10 +70,6 @@ struct TagsSidebar: View {
 }
 
 
-
-
-
-
 struct EditableTextList: View {
   @State public var storyBeats: [StoryBeat] = [StoryBeat(text: "", isScene: true, tags: [])]
   @State public var tags: [String] = ["Love Plot", "Action"]
@@ -98,7 +88,7 @@ struct EditableTextList: View {
                 deleteBeat(beat)
               }) {
                 Label("Delete", systemImage: "trash")
-              }
+              }.keyboardShortcut(.delete, modifiers: [.shift, .command])
               Menu("Add Tag") {
                 ForEach(tags, id: \.self) { tag in
                   Button(tag) {
@@ -162,7 +152,6 @@ struct EditableTextList: View {
     }
   }
 }
-
 
 
 struct EditableTextRow: View {
