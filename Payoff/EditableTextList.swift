@@ -166,18 +166,34 @@ struct EditableTextList: View {
 
 
 struct EditableTextRow: View {
-  @Binding var beat: StoryBeat
-  enum FocusField: Hashable {
-    case field
-  }
-  @FocusState private var focusedField: FocusField?
-  
-  var body: some View {
-    TextField("Enter text", text: $beat.text)
-      .focused($focusedField, equals: .field)
-      .onAppear {self.focusedField = .field}
-  }
+    @Binding var beat: StoryBeat
+    enum FocusField: Hashable {
+        case field
+    }
+    @FocusState private var focusedField: FocusField?
+
+    var body: some View {
+        HStack {
+            // Text Field for the Story Beat
+            TextField("Enter text", text: $beat.text)
+                .focused($focusedField, equals: .field)
+                .onAppear { self.focusedField = .field }
+
+            Spacer() // This will push the tags to the far right
+
+            // Displaying Tags
+            HStack {
+                ForEach(beat.tags.sorted(), id: \.self) { tag in
+                    Text(tag)
+                        .padding(5)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(5)
+                }
+            }
+        }
+    }
 }
+
 
 #Preview {
     EditableTextList()
