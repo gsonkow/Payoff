@@ -72,7 +72,7 @@ struct TagsSidebar: View {
 
 struct EditableTextList: View {
   @State public var storyBeats: [StoryBeat] = [StoryBeat(text: "", isScene: true, tags: [])]
-  @State public var tags: [String] = ["Love", "Action", "Comedy", "Tragedy"]  // add types as needed
+  @State public var tags: [String] = ["Love", "Action", "Comedy", "Tragedy"]  
   @State private var selectedTag: String?
   
   var body: some View {
@@ -86,12 +86,21 @@ struct EditableTextList: View {
               Button(action: {
                 deleteBeat(beat)
               }) {
-                Label("Delete", systemImage: "trash")
-              }.keyboardShortcut(.delete, modifiers: [.shift, .command])
+                Label("Delete Beat", systemImage: "trash")
+              }
+              
               Menu("Add Tag") {
                 ForEach(tags, id: \.self) { tag in
                   Button(tag) {
                     assignTag(tag, to: beat)
+                  }
+                }
+              }
+              
+              Menu("Delete Tag") {
+                ForEach(Array(beat.tags), id: \.self) { tag in
+                  Button(tag) {
+                    deleteTag(tag, from: beat)
                   }
                 }
               }
@@ -136,6 +145,12 @@ struct EditableTextList: View {
     storyBeats.append(StoryBeat(text: "", isScene: true, tags: []))
   }
   
+  func deleteTag(_ tag: String, from beat: StoryBeat) {
+    if let index = storyBeats.firstIndex(where: { $0.id == beat.id }) {
+      storyBeats[index].tags.remove(tag)
+    }
+  }
+  
   func getIndex(for beat: StoryBeat) -> Int {
     if let index = storyBeats.firstIndex(where: { $0.id == beat.id }) {
       return index
@@ -152,35 +167,35 @@ struct EditableTextList: View {
 
 
 struct EditableTextRow: View {
-    @Binding var beat: StoryBeat
-    enum FocusField: Hashable {
-        case field
-    }
-    @FocusState private var focusedField: FocusField?
-
-    var body: some View {
-        HStack {
-            // Text Field for the Story Beat
-            TextField("Enter text", text: $beat.text)
-                .focused($focusedField, equals: .field)
-                .onAppear { self.focusedField = .field }
-
-            Spacer() // This will push the tags to the far right
-
-            // Displaying Tags
-            HStack {
-                ForEach(beat.tags.sorted(), id: \.self) { tag in
-                    Text(tag)
-                        .padding(5)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(5)
-                }
-            }
+  @Binding var beat: StoryBeat
+  enum FocusField: Hashable {
+    case field
+  }
+  @FocusState private var focusedField: FocusField?
+  
+  var body: some View {
+    HStack {
+      // Text Field for the Story Beat
+      TextField("Enter text", text: $beat.text)
+        .focused($focusedField, equals: .field)
+        .onAppear { self.focusedField = .field }
+      
+      Spacer()
+      
+      // Displaying Tags
+      HStack {
+        ForEach(beat.tags.sorted(), id: \.self) { tag in
+          Text(tag)
+            .padding(5)
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(5)
         }
+      }
     }
+  }
 }
 
 
 #Preview {
-    EditableTextList()
+  EditableTextList()
 }
