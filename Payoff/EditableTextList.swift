@@ -72,9 +72,8 @@ struct TagsSidebar: View {
 
 struct EditableTextList: View {
   @State public var storyBeats: [StoryBeat] = [StoryBeat(text: "", isScene: true, tags: [])]
-  @State public var tags: [String] = ["Love Plot", "Action"]
+  @State public var tags: [String] = ["Love", "Action", "Comedy", "Tragedy"]  // add types as needed
   @State private var selectedTag: String?
-  
   
   var body: some View {
     HStack{
@@ -129,11 +128,9 @@ struct EditableTextList: View {
     }
   }
   
-  
   func moveBeat(from source: IndexSet, to destination: Int) {
     storyBeats.move(fromOffsets: source, toOffset: destination)
   }
-  
   
   func addNewBeat() {
     storyBeats.append(StoryBeat(text: "", isScene: true, tags: []))
